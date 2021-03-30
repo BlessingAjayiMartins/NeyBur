@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "649134218923",
+    "project_id": "neybur-23349",
+    "storage_bucket": "neybur-23349.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:649134218923:android:02d115f83bec45844a21ee",
+        "android_client_info": {
+          "package_name": "com.neybur"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "649134218923-v6engmpn4g6vgloml0vp6gm9vu13mfep.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDZ6UR_ZUhpKjRB0_ElP2zn4ek5lBfO-lg"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "649134218923-v6engmpn4g6vgloml0vp6gm9vu13mfep.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
