@@ -3,15 +3,19 @@ import React, {useEffect, useState} from 'react'
 import {SafeAreaView, Text, PermissionsAndroid} from 'react-native'
 import {Platform} from 'react-native'
 import RNPermissions, {RESULTS, PERMISSIONS} from 'react-native-permissions'
+import firestore from '@react-native-firebase/firestore'
+// import store from '../redux/store';
+import { useDispatch } from 'react-redux'
+import {setLocation} from '../redux/slices/neyburhoodSlice'
 
 const location = () =>{
-  // const apiKey = ""
+  const apiKey = ""
   const LOCATION =
   Platform.OS === 'android'
     ? PERMISSIONS.ANDROID.ACCESS_COARSE_LOCATION
     : PERMISSIONS.IOS.LOCATION_WHEN_IN_USE
   
-  const [neyburhood, setNeyburhood] = useState({country: '', state: '', sublocality: '', locality: '' })
+  const [neyburhood, setNeyburhood] = useState({country: '', administrativeAreaLevel1: '', sublocality: '', locality: '' , doc: ''})
   const [userLocation, setUserLocation] = useState({
     lat: '',
     lng: '',
@@ -101,14 +105,23 @@ const location = () =>{
         const json = await response.json()
         const addressComponents = json.results[0].address_components
         
-        let result 
+        let localityResult, sublocalityResult, stateResult, countryResult 
         for (let a = 0; a < addressComponents.length; a++) {
           if (addressComponents[a].types[0] == 'neighborhood') {
-            result = String(addressComponents[a].long_name)
+            localityResult = String(addressComponents[a].long_name)
+          }
+          if (addressComponents[a].types[0] == 'sublocality') {
+            sublocalityResult = String(addressComponents[a].long_name)
+          }
+          if (addressComponents[a].types[0] == 'administrative_area_level_1') {
+            stateResult = String(addressComponents[a].long_name)
+          }
+          if (addressComponents[a].types[0] == 'country') {
+            countryResult = String(addressComponents[a].long_name)
           }
         }
-        // console.log(result)
-        setNeyburhood({...neyburhood, locality: result})
+        // console.log(localityResult)
+        setNeyburhood({...neyburhood, locality: localityResult, sublocality: sublocalityResult, administrativeAreaLevel1: stateResult, country: countryResult})
       } catch (error) {
         console.log({error})
       }
@@ -145,7 +158,23 @@ const location = () =>{
     // }
     // getNeyburhood()
   // },[neyburhood])
-  return neyburhood.locality
+  // need redux toolkit for global state management
+  const docRef = `${neyburhood.country}/${neyburhood.administrativeAreaLevel1}/${neyburhood.sublocality}/${neyburhood.locality}`
+  setNeyburhood({...neyburhood, doc: docRef})
+  const dispatch = useDispatch()
+  dispatch(setLocation(neyburhood))
+  // if docRef is not a document in neyburhoods, create new neyburhood. 
+
+  // return neyburhood.locality
+
+  // part of the function that will help you populate firestore with neyburhoods later
+  firestore()
+    .collection('neyburhoods')
+    .doc(`${neyburhood.country}/${neyburhood.state}/${neyburhood.sublocality}/${neyburhood.locality}`)
+    .set(
+      {...neyburhood},
+      {merge: true}
+    )
 }
 
 

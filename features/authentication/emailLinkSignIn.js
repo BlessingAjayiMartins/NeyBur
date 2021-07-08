@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
-import { Layout, Input } from '@ui-kitten/components';
-import { Alert, Button, StyleSheet } from 'react-native';
+import { Layout, Input, Button } from '@ui-kitten/components';
+import { Alert, StyleSheet } from 'react-native';
 import auth from '@react-native-firebase/auth';
 import {default as theme} from '../../theme.json'
 const EmailLinkSignIn = () => {
@@ -10,7 +10,9 @@ const EmailLinkSignIn = () => {
     <Layout style={styles.container}>
       {/* <Layout style={styles.verticalCenter}> */}
         <Input style={styles.input} status='primary' value={email} onChangeText={text => setEmail(text)} />
-        <Button title="Send login link" onPress={() => sendSignInLink(email)} />
+        <Button onPress={() => sendSignInLink(email)}>
+          Send Login link
+        </Button>
       {/* </Layout> */}
       
     </Layout>
@@ -48,7 +50,7 @@ const styles = StyleSheet.create({
     flex: 1,
     // height: '100%',
     // width: '100%',
-    padding: '7% 7%',
+    padding: '7%',
     justifyContent: 'center',
     alignItems: 'center'
   },

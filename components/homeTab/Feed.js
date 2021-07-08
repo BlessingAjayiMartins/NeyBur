@@ -1,7 +1,7 @@
 import React from 'react'
 import { Image, TouchableOpacity, StyleSheet, View} from 'react-native'
 import { Avatar, Layout, Text, withStyles, List } from '@ui-kitten/components'
-import {default as theme} from '../theme.json'
+import {default as theme} from '../../theme.json'
 import { useNavigation } from '@react-navigation/native';
 
 

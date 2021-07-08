@@ -13,72 +13,47 @@ import React, {
 import { ApplicationProvider, IconRegistry, Layout, Text, Icon } from '@ui-kitten/components';
 import { EvaIconsPack } from '@ui-kitten/eva-icons';
 import * as eva from '@eva-design/eva';
-import Home from './components/Home'
-import Travel from './components/Travel'
-import Profile from './components/Profile'
-import { NavigationContainer } from '@react-navigation/native';
-import { createBottomTabNavigator } from '@react-navigation/bottom-tabs'
+import HomeScreen from './components/homeScreen/HomeScreen'
 import EmailLinkSignIn from './features/authentication/emailLinkSignIn'
+import SignUp from './features/authentication/signUp'
 import {default as theme} from './theme.json'
 import {
-  StyleSheet,
-  Button,
-  View,
+  StyleSheet
 } from 'react-native';
-const Tab = createBottomTabNavigator()
-const LandingPage = ({navigation}) => {
-  return (
-    <View style={styles.container}>
-      <Text>Welcome Neybur!</Text>
-      <Button 
-        title="Lets take a peek"
-        onPress={()=> navigation.navigate('Home')}
-      />
-    </View>
-  )
-}
+import store from './redux/store'
+import { Provider } from 'react-redux'
+
+// const LandingPage = ({navigation}) => {
+//   return (
+//     <View style={styles.container}>
+//       <Text>Welcome Neybur!</Text>
+//       <Button 
+//         title="Lets take a peek"
+//         onPress={()=> navigation.navigate('Home')}
+//       />
+//     </View>
+//   )
+// }
 const App = () => {
-  const [login, setLogin] = useState(false)
+  const [login, setLogin] = useState(true)
   return (
     login ? (
       <>
+      <Provider store={store}>
         <IconRegistry icons={EvaIconsPack} />
-          <ApplicationProvider {...eva} theme={{...eva.dark, ...theme}}>
-            <NavigationContainer>
-            <Tab.Navigator
-              screenOptions={({route}) => ({
-                tabBarIcon:({focused}) => {
-                  let name
-                
-                  if (route.name === 'Home') {
-                    name = 'home'
-                  } else if (route.name === 'Travel') {
-                    name = 'paper-plane'
-                  } else if (route.name === 'Profile') {
-                    name = 'person'
-                  }
-                
-                  return <Icon name={name} width={40} height={32} fill={focused ? '#111' :      '#939393'} />
-                }
-              })}
-              tabBarOptions={{
-                showLabel: false
-              }}
-            >
-              <Tab.Screen name="Home" component={Home} />
-              <Tab.Screen name="Travel" component={Travel} />
-              {/* <Tab.Screen name="AddPost" component={AddPost} /> */}
-              <Tab.Screen name="Profile" component={Profile} />
-            </Tab.Navigator>
-            </NavigationContainer>
+          <ApplicationProvider {...eva} theme={{...eva.light, ...theme}}>
+            <HomeScreen />
           </ApplicationProvider>
-    </>
+      </Provider>
+      </>
     ) : 
     (
     <>
+    <Provider store={store}>
       <ApplicationProvider {...eva} theme={{...eva.light, ...theme}}>
-        <EmailLinkSignIn />
+        <SignUp />
       </ApplicationProvider>
+    </Provider>
     </>
     )
   )
