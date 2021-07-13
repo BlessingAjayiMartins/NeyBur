@@ -1,12 +1,18 @@
 import Geolocation from 'react-native-geolocation-service';
 import React, {useEffect, useState} from 'react'
-import {SafeAreaView, Text, PermissionsAndroid} from 'react-native'
+import {PermissionsAndroid} from 'react-native'
 import {Platform} from 'react-native'
 import RNPermissions, {RESULTS, PERMISSIONS} from 'react-native-permissions'
 import firestore from '@react-native-firebase/firestore'
-// import store from '../redux/store';
 import { useDispatch } from 'react-redux'
 import {setLocation} from '../redux/slices/neyburhoodSlice'
+
+
+// location function is meant to ...
+// request access from native platform to recieve long/lat data via getLocation()
+// save long/lat state 
+// pass long/lat to google maps api to get the region data via getNeyburhood
+// save data in global state via redux
 
 const location = () =>{
   const apiKey = ""
@@ -131,33 +137,7 @@ const location = () =>{
     // console.log(userLocation)
     return () => Geolocation.stopObserving()
   }, [userLocation])
-  // const lat = userLocation.lat
-  // const long = userLocation.lng
-  // console.log({lat:lat, long: long})
-
-  // useEffect(() => {
-    // const getNeyburhood = async() => {
-    //   console.log(userLocation)
-    //   try {
-    //     const response = await fetch(`https://maps.googleapis.com/maps/api/geocode/json?latlng=${userLocation.lat},${userLocation.lng}&key=${apiKey}`)
-    //     console.log(response)
-    //     const json = await response.json()
-    //     const addressComponents = json.results[0].address_components
-        
-    //     let result 
-    //     for (let a = 0; a < addressComponents.length; a++) {
-    //       if (addressComponents[a].types[0] == 'neighborhood') {
-    //         result = String(addressComponents[a].long_name)
-    //       }
-    //     }
-    //     // console.log(result)
-    //     setNeyburhood({...neyburhood, locality: result})
-    //   } catch (error) {
-    //     console.log({error})
-    //   }
-    // }
-    // getNeyburhood()
-  // },[neyburhood])
+  
   // need redux toolkit for global state management
   const docRef = `${neyburhood.country}/${neyburhood.administrativeAreaLevel1}/${neyburhood.sublocality}/${neyburhood.locality}`
   setNeyburhood({...neyburhood, doc: docRef})
