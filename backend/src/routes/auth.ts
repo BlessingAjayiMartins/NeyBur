@@ -1,4 +1,4 @@
-import express from 'express';
+import express, { Request, Response } from 'express';
 import { body, validationResult } from 'express-validator';
 import jwt from 'jsonwebtoken';
 import { User } from '../models/User';
@@ -13,7 +13,7 @@ const registerValidation = [
 ];
 
 // Registration endpoint
-authRoutes.post('/register', registerValidation, async (req, res) => {
+authRoutes.post('/register', registerValidation, async (req: Request, res: Response) => {
   try {
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
@@ -62,7 +62,7 @@ const loginValidation = [
 ];
 
 // Login endpoint
-authRoutes.post('/login', loginValidation, async (req, res) => {
+authRoutes.post('/login', loginValidation, async (req: Request, res: Response) => {
   try {
     const errors = validationResult(req);
     if (!errors.isEmpty()) {

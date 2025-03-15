@@ -1,4 +1,4 @@
-import express from 'express';
+import express, { Response } from 'express';
 import { body, validationResult } from 'express-validator';
 import { auth, AuthRequest } from '../middleware/auth';
 import { Post } from '../models/Post';
@@ -14,7 +14,7 @@ const createPostValidation = [
 ];
 
 // Create a new post
-postRoutes.post('/', auth, createPostValidation, async (req: AuthRequest, res) => {
+postRoutes.post('/', auth, createPostValidation, async (req: AuthRequest, res: Response) => {
   try {
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
@@ -42,7 +42,7 @@ postRoutes.post('/', auth, createPostValidation, async (req: AuthRequest, res) =
 });
 
 // Get posts within radius
-postRoutes.get('/nearby', auth, async (req: AuthRequest, res) => {
+postRoutes.get('/nearby', auth, async (req: AuthRequest, res: Response) => {
   try {
     const { longitude, latitude, radius = 5000 } = req.query;
 
@@ -68,7 +68,7 @@ postRoutes.get('/nearby', auth, async (req: AuthRequest, res) => {
 });
 
 // Get global posts
-postRoutes.get('/global', auth, async (req: AuthRequest, res) => {
+postRoutes.get('/global', auth, async (req: AuthRequest, res: Response) => {
   try {
     const page = parseInt(req.query.page as string) || 1;
     const limit = 20;
@@ -92,7 +92,7 @@ postRoutes.get('/global', auth, async (req: AuthRequest, res) => {
 });
 
 // Like/Unlike a post
-postRoutes.post('/:postId/like', auth, async (req: AuthRequest, res) => {
+postRoutes.post('/:postId/like', auth, async (req: AuthRequest, res: Response) => {
   try {
     const post = await Post.findById(req.params.postId);
     if (!post) {
@@ -117,7 +117,7 @@ postRoutes.post('/:postId/like', auth, async (req: AuthRequest, res) => {
 postRoutes.post('/:postId/comment', auth, [
   body('content').trim().notEmpty().withMessage('Comment cannot be empty')
     .isLength({ max: 500 }).withMessage('Comment must be less than 500 characters'),
-], async (req: AuthRequest, res) => {
+], async (req: AuthRequest, res: Response) => {
   try {
     const errors = validationResult(req);
     if (!errors.isEmpty()) {

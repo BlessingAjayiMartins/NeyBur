@@ -1,9 +1,13 @@
 import { Request, Response, NextFunction } from 'express';
-import jwt from 'jsonwebtoken';
+import jwt, { JwtPayload } from 'jsonwebtoken';
 import { User } from '../models/User';
 
 export interface AuthRequest extends Request {
   user?: any;
+}
+
+interface JWTPayload extends JwtPayload {
+  userId: string;
 }
 
 export const auth = async (req: AuthRequest, res: Response, next: NextFunction) => {
@@ -14,7 +18,7 @@ export const auth = async (req: AuthRequest, res: Response, next: NextFunction) 
       return res.status(401).json({ message: 'Authentication required' });
     }
 
-    const decoded = jwt.verify(token, process.env.JWT_SECRET || 'your-secret-key');
+    const decoded = jwt.verify(token, process.env.JWT_SECRET || 'your-secret-key') as JWTPayload;
     const user = await User.findById(decoded.userId);
 
     if (!user) {

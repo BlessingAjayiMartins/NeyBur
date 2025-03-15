@@ -1,4 +1,4 @@
-import express from 'express';
+import express, { Response } from 'express';
 import multer from 'multer';
 import { v2 as cloudinary } from 'cloudinary';
 import { auth, AuthRequest } from '../middleware/auth';
@@ -28,7 +28,7 @@ const upload = multer({
 });
 
 // Upload media
-mediaRoutes.post('/upload', auth, upload.array('media', 4), async (req: AuthRequest, res) => {
+mediaRoutes.post('/upload', auth, upload.array('media', 4), async (req: AuthRequest, res: Response) => {
   try {
     if (!req.files || !Array.isArray(req.files)) {
       return res.status(400).json({ message: 'No files uploaded' });
